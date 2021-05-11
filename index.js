@@ -30,6 +30,10 @@ const server = http.createServer((req,res) => {
             'payload' : buffer
         };
 
+        chosenHandler(data, (statusCode, playload) => {
+            
+        });
+
         res.end('Hello world!\n');
         console.log('Request received on path: ' + trimmedPath);
     });
