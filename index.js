@@ -20,6 +20,16 @@ const server = http.createServer((req,res) => {
     req.on('end', () => {
         buffer += decoder.end();
 
+        const chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
+
+        const data = {
+            'trimmedPath' : trimmedPath,
+            'queryStringObject' : queryStringObject,
+            'method' : method,
+            'headers' : headers,
+            'payload' : buffer
+        };
+
         res.end('Hello world!\n');
         console.log('Request received on path: ' + trimmedPath);
     });
@@ -28,3 +38,15 @@ const server = http.createServer((req,res) => {
 server.listen(3000, () => {
     console.log('Server is listening on port 3000');
 })
+
+const handlers = {}
+handlers.sample = (data, callback) => {
+    callback(406,{'name' : 'sample handler'});
+};
+handlers.notFound = (data, callback) => {
+    callback(404);
+};
+
+const router = {
+    'sample' : handlers.sample
+}
