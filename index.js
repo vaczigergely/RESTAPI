@@ -31,11 +31,15 @@ const server = http.createServer((req,res) => {
         };
 
         chosenHandler(data, (statusCode, playload) => {
-            
-        });
+            statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+            payload = typeof(payload) == 'object' ? payload : {};
+            const payloadString = JSON.stringify(payload);
 
-        res.end('Hello world!\n');
-        console.log('Request received on path: ' + trimmedPath);
+            res.writeHead(statusCode);
+            res.end(payloadString);
+
+            console.log(statusCode, payloadString);
+        });
     });
 })
 
